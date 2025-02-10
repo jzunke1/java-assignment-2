@@ -221,21 +221,23 @@ class Maze {
         }
     }
 
-    public String interactWithCurrentRoom() {
-        if (currentRoom instanceof Interactable) {
-            return ((Interactable) currentRoom).interact(player);
-        } else {
-            return "Nothing to interact with here.";
-        }
+public String lootCurrentRoom() {
+    if (currentRoom instanceof Lootable) {
+        player.addToScore(10); // Add points for looting
+        return ((Lootable) currentRoom).loot(player);
+    } else {
+        return "There's nothing to loot.";
     }
+}
 
-    public String lootCurrentRoom() {
-        if (currentRoom instanceof Lootable) {
-            return ((Lootable) currentRoom).loot(player);
-        } else {
-            return "There's nothing to loot.";
-        }
+public String interactWithCurrentRoom() {
+    if (currentRoom instanceof Interactable) {
+        player.addToScore(5); // Add points for interacting
+        return ((Interactable) currentRoom).interact(player);
+    } else {
+        return "Nothing to interact with here.";
     }
+}
 
     public boolean move(char direction) {
         Room nextRoom = currentRoom.getAdjoiningRoom(direction);
