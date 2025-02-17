@@ -197,6 +197,7 @@ class Maze {
         Room startRoom = new InteractableRoom("Foyer", "You found a hidden switch!");
         LootableRoom treasureRoom = new LootableRoom("Treasure Room", "Golden Key");
         InteractableRoom puzzleRoom = new InteractableRoom("Puzzle Room", "A hidden passage opens!");
+        LootableRoom hallway = new LootableRoom("Hallway", "Gold Coins");
         ExitableRoom exitRoom = new ExitableRoom("Exit Room");
 
         // Connect Rooms (very basic maze)
@@ -204,14 +205,16 @@ class Maze {
         treasureRoom.setSouth(startRoom);
         treasureRoom.setEast(puzzleRoom);
         puzzleRoom.setWest(treasureRoom);
-        puzzleRoom.setEast(exitRoom);
-        exitRoom.setWest(puzzleRoom);
+        puzzleRoom.setEast(hallway);
+        hallway.setWest(puzzleRoom);
+        hallway.setEast(exitRoom);
+        exitRoom.setWest(hallway);
 
         // Set starting room
         currentRoom = startRoom;
     }
-
     public String exitCurrentRoom() {
+
         if (currentRoom instanceof Exitable) {
             String result = ((Exitable) currentRoom).exit(player);
             isFinished = true;
@@ -221,23 +224,23 @@ class Maze {
         }
     }
 
-public String lootCurrentRoom() {
-    if (currentRoom instanceof Lootable) {
-        player.addToScore(10); // Add points for looting
-        return ((Lootable) currentRoom).loot(player);
-    } else {
-        return "There's nothing to loot.";
+    public String lootCurrentRoom() {
+        if (currentRoom instanceof Lootable) {
+            player.addToScore(10); // Add points for looting
+            return ((Lootable) currentRoom).loot(player);
+        } else {
+            return "There's nothing to loot.";
+        }
     }
-}
 
-public String interactWithCurrentRoom() {
-    if (currentRoom instanceof Interactable) {
-        player.addToScore(5); // Add points for interacting
-        return ((Interactable) currentRoom).interact(player);
-    } else {
-        return "Nothing to interact with here.";
+    public String interactWithCurrentRoom() {
+        if (currentRoom instanceof Interactable) {
+            player.addToScore(5); // Add points for interacting
+            return ((Interactable) currentRoom).interact(player);
+        } else {
+            return "Nothing to interact with here.";
+        }
     }
-}
 
     public boolean move(char direction) {
         Room nextRoom = currentRoom.getAdjoiningRoom(direction);
